@@ -1,0 +1,21 @@
+# Go binary
+*.exe
+*.exe~
+*.out
+*.app
+# Go modules
+/vendor/
+/bin/
+/pkg/
+# VS Code
+.vscode/
+
+# GoLand
+.idea/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+# Temporary files
+*.log
+*.tmp
