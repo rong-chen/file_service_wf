@@ -19,3 +19,5 @@
 # Temporary files
 *.log
 *.tmp
+/breakpointDir/
+/uploads/

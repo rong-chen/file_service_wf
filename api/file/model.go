@@ -2,6 +2,7 @@ package file
 
 import (
 	"file_service/global"
+	"github.com/gofrs/uuid/v5"
 )
 
 const (
@@ -11,14 +12,15 @@ const (
 
 type File struct {
 	global.QyModel
-	FileTotal int         `json:"file_total" gorm:"column:file_total;comment:切片总数" binding:"required"`
-	UserId    uint        `json:"user_id" gorm:"column:user_id;comment:上传用户"`
-	FileName  string      `json:"file_name" gorm:"column:file_name;comment:文件名称" binding:"required"`
-	FilePath  string      `json:"file_path" gorm:"column:file_path;comment:文件路径"`
-	FileType  string      `json:"file_type" gorm:"column:file_type;comment:文件格式" binding:"required"`
-	FileState bool        `json:"file_state" gorm:"column:file_state;comment:文件状态，是否完成"`
-	FileMd5   string      `json:"file_md5" gorm:"column:file_md5;comment:文件md5" binding:"required"`
-	ChunkList []FileChunk `json:"chunk_list" gorm:"foreignKey:FileId;references:ID"`
+	FileTotal    int         `json:"file_total" gorm:"column:file_total;comment:切片总数" binding:"required"`
+	UserId       uint        `json:"user_id" gorm:"column:user_id;comment:上传用户"`
+	FileName     string      `json:"file_name" gorm:"column:file_name;comment:文件名称" binding:"required"`
+	FilePathName uuid.UUID   `json:"file_path_name" gorm:"column:file_path_name;comment:文件路径名称"`
+	FilePath     string      `json:"file_path" gorm:"column:file_path;comment:文件路径"`
+	FileType     string      `json:"file_type" gorm:"column:file_type;comment:文件格式" binding:"required"`
+	FileState    bool        `json:"file_state" gorm:"column:file_state;comment:文件状态，是否完成"`
+	FileMd5      string      `json:"file_md5" gorm:"column:file_md5;comment:文件md5" binding:"required"`
+	ChunkList    []FileChunk `json:"chunk_list" gorm:"foreignKey:FileId;references:ID"`
 }
 
 type FileChunk struct {

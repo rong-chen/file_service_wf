@@ -3,6 +3,7 @@ package file
 import (
 	"file_service/model/common/response"
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid/v5"
 	"io"
 	"strconv"
 	"strings"
@@ -17,6 +18,7 @@ func FindFile(c *gin.Context) {
 		response.FailWithMessage("参数错误:"+err.Error(), c)
 		return
 	}
+	file.FilePathName, _ = uuid.NewV1()
 	findFile, err := CreateOrFindFile(file)
 	if err != nil {
 		response.FailWithMessage("添加失败："+err.Error(), c)
@@ -56,6 +58,7 @@ func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
 		return false // 切片不完整，废弃
 	}
 }
+
 func UploadChunkFile(c *gin.Context) {
 	// file临时存放点
 	fileMd5 := c.Request.FormValue("fileMd5")
@@ -92,6 +95,7 @@ func UploadChunkFile(c *gin.Context) {
 	files.FileMd5 = fileMd5
 	files.FileName = fileName
 	files.FileTotal = chunkTotal
+
 	files.FileType = fileType
 	files.UserId = userId.(uint)
 	findFile, err := CreateOrFindFile(files)
@@ -99,7 +103,8 @@ func UploadChunkFile(c *gin.Context) {
 		response.FailWithMessage("查找或创建记录失败", c)
 		return
 	}
-	pathC, err := BreakPointContinue(cen, fileName, chunkNumber, fileMd5)
+	fileNamePath := findFile.FilePathName.String()
+	pathC, err := BreakPointContinue(cen, fileNamePath, chunkNumber, fileMd5)
 	if err != nil {
 		response.FailWithMessage("断点续传失败", c)
 		return
@@ -131,7 +136,8 @@ func UploadSuccess(c *gin.Context) {
 		response.FailWithMessage("查找或创建记录失败", c)
 		return
 	}
-	filePath, err := MakeFile(fileName, fileMd5)
+	fileNamePath := findFile.FilePathName.String()
+	filePath, err := MakeFile(fileNamePath, fileMd5)
 	if err != nil {
 		response.FailWithMessage("创建文件失败："+err.Error(), c)
 		return
