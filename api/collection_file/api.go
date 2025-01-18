@@ -3,6 +3,7 @@ package collection_file
 import (
 	"file_service/model/common/response"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 func Like(c *gin.Context) {
@@ -35,4 +36,15 @@ func List(c *gin.Context) {
 		return
 	}
 	response.OkWithData(files, "", c)
+}
+
+func FindMusic(c *gin.Context) {
+	name := c.Param("val")
+	name = strings.TrimPrefix(name, "/")
+	val, err := FindMusicListByFileVal(name)
+	if err != nil {
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithData(val, "", c)
 }

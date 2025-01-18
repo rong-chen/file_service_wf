@@ -4,6 +4,7 @@ import (
 	"file_service/global"
 	"file_service/middleware"
 	"file_service/router"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -36,12 +37,7 @@ func Routers() *gin.Engine {
 	CheckGroup := Router.Group(global.QY_CONFIG.System.RouterPrefix)
 	NoCheckGroup := Router.Group(global.QY_CONFIG.System.RouterPrefix)
 	// 提供静态文件服务，指向 dist 目录
-	Router.Static("/dist", "./dist")
-
-	// 默认路由返回前端的 index.html 文件
-	Router.NoRoute(func(c *gin.Context) {
-		c.File("./dist/index.html")
-	})
+	Router.Use(static.Serve("/", static.LocalFile("./dist", false)))
 	CheckGroup.Use(middleware.JWTAuth())
 	{
 		// 注册路由信息 第一公共的，不需要校验token

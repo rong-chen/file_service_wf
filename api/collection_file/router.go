@@ -10,5 +10,6 @@ func (*Router) InitRouter(group *gin.RouterGroup) {
 	{
 		r.GET("like-list", List)
 		r.POST("like", Like)
+		r.GET("find/*val", FindMusic)
 	}
 }
