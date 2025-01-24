@@ -3,12 +3,17 @@ package menu
 import (
 	"errors"
 	"file_service/api/authority"
+	user2 "file_service/api/user"
 	"file_service/global"
+	"file_service/utils"
 	"fmt"
+	"github.com/gofrs/uuid/v5"
 	"gorm.io/gorm"
 )
 
 func InitRouterDb() error {
+
+	// 创建路由列表
 	routerList := []SysBaseMenu{
 		{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "仪表盘", Component: "view/Home/index.vue"},
 		{UID: 2, ParentId: 0, Path: "admin", Name: "superAdmin", Label: "超级管理员", Component: "view/superAdmin/index.vue"},
@@ -29,7 +34,7 @@ func InitRouterDb() error {
 			}
 		}
 	}
-
+	// 创建权限列表
 	authorityList := []authority.Authorities{
 		{AuthorityName: "超级管理员", BackRouter: "", AuthorityId: 888},
 		{AuthorityName: "普通用户", BackRouter: "", AuthorityId: 88},
@@ -48,6 +53,23 @@ func InitRouterDb() error {
 			}
 		}
 	}
+
+	// 创建超级管理员
+	var user user2.Users
+	if err := global.QY_Db.Where("id = ?", 1).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			user.UserName = "超级管理员"
+			user.AccountName = "超级管理员"
+			user.UUID = uuid.Must(uuid.NewV4())
+			user.Account = "admin"
+			user.IsExamine = true
+			user.Password = utils.GenerateFromPassword("130561")
+			if createErr := global.QY_Db.Create(&user).Error; createErr != nil {
+				return fmt.Errorf("创建超级管理员失败: %w", createErr)
+			}
+		}
+	}
+
 	return nil
 }
 
