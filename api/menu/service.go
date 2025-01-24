@@ -2,6 +2,7 @@ package menu
 
 import (
 	"errors"
+	"file_service/api/authority"
 	"file_service/global"
 	"fmt"
 	"gorm.io/gorm"
@@ -25,6 +26,25 @@ func InitRouterDb() error {
 				}
 			} else {
 				return fmt.Errorf("检查路由数据失败: %w", err)
+			}
+		}
+	}
+
+	authorityList := []authority.Authorities{
+		{AuthorityName: "超级管理员", BackRouter: "", AuthorityId: 888},
+		{AuthorityName: "普通用户", BackRouter: "", AuthorityId: 88},
+		{AuthorityName: "音乐用户", BackRouter: "", AuthorityId: 8},
+	}
+
+	for _, item := range authorityList {
+		var author authority.Authorities
+		if err := global.QY_Db.Where("authority_id = ?", item.AuthorityId).First(&author).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				if createErr := global.QY_Db.Create(&item).Error; createErr != nil {
+					return fmt.Errorf("插入权限数据失败: %w", createErr)
+				}
+			} else {
+				return fmt.Errorf("检查权限数据失败: %w", err)
 			}
 		}
 	}

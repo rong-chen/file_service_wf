@@ -1,10 +1,8 @@
 package utils
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"net"
 	"time"
 )
 
@@ -53,60 +51,6 @@ func ParseToken(tokenString string) (*Claims, error) {
 	}
 }
 
-//// CreateTokenByOldToken 旧token 换新token 使用归并回源避免并发问题
-//func (j *JWT) CreateTokenByOldToken(oldToken string, claims request.CustomClaims) (string, error) {
-//	v, err, _ := global.QY_Concurrency_Control.Do("JWT:"+oldToken, func() (interface{}, error) {
-//		return j.CreateToken(claims)
-//	})
-//	return v.(string), err
-//}
-
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that's not even a token")
-	TokenInvalid     = errors.New("couldn't handle this token")
-)
-
-//func NewJWT() *JWT {
-//	return &JWT{
-//		[]byte(global.QY_CONFIG.JWT.SigningKey),
-//	}
-//}
-
-func SetToken(c *gin.Context, token string, maxAge int) {
-	// 增加cookie x-token 向来源的web添加
-	host, _, err := net.SplitHostPort(c.Request.Host)
-	if err != nil {
-		host = c.Request.Host
-	}
-
-	if net.ParseIP(host) != nil {
-		c.SetCookie("x-token", token, maxAge, "/", "", false, false)
-	} else {
-		c.SetCookie("x-token", token, maxAge, "/", host, false, false)
-	}
-}
-
 func GetToken(c *gin.Context) string {
 	return c.GetHeader("q-token")
-}
-
-// ParseToken 解析 token
-//func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
-//
-//}
-
-func ClearToken(c *gin.Context) {
-	// 增加cookie x-token 向来源的web添加
-	host, _, err := net.SplitHostPort(c.Request.Host)
-	if err != nil {
-		host = c.Request.Host
-	}
-
-	if net.ParseIP(host) != nil {
-		c.SetCookie("x-token", "", -1, "/", "", false, false)
-	} else {
-		c.SetCookie("x-token", "", -1, "/", host, false, false)
-	}
 }
