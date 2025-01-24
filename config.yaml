@@ -37,7 +37,7 @@ mysql:
     db-name: windChimes
     username: admin
     password: 130561Cr@
-    path: chenrong.vip
+    path: 127.0.0.1
     engine: ""
     log-mode: error
     max-idle-conns: 10

@@ -4,7 +4,7 @@ import (
 	"file_service/global"
 	"file_service/middleware"
 	"file_service/router"
-	"github.com/gin-contrib/static"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -32,12 +32,20 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 func Routers() *gin.Engine {
 	Router := gin.New()
 	Router.Use(gin.Recovery())
+	// 配置 CORS：允许所有域名、所有方法、所有请求头
+	Router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},                                       // 允许所有域名
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // 允许的 HTTP 方法
+		AllowHeaders:     []string{"*"},                                       // 允许所有请求头
+		AllowCredentials: true,                                                // 是否允许携带凭证
+	}))
 	Router.StaticFS(global.QY_CONFIG.Local.StorePath, justFilesFilesystem{http.Dir(global.QY_CONFIG.Local.StorePath)})
 	// 方便统一添加路由组前缀 多服务器上线使用
 	CheckGroup := Router.Group(global.QY_CONFIG.System.RouterPrefix)
 	NoCheckGroup := Router.Group(global.QY_CONFIG.System.RouterPrefix)
+
 	// 提供静态文件服务，指向 dist 目录
-	Router.Use(static.Serve("/", static.LocalFile("./dist", false)))
+	// Router.Use(static.Serve("/", static.LocalFile("./dist", false)))
 	CheckGroup.Use(middleware.JWTAuth())
 	{
 		// 注册路由信息 第一公共的，不需要校验token

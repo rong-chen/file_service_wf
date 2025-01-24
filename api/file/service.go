@@ -13,8 +13,19 @@ import (
 
 func CreateOrFindFile(file File) (resFile File, err error) {
 	if errors.Is(global.QY_Db.Where("file_name = ? and file_state = ? and user_id = ? and file_md5 = ? ", file.FileName, true, file.UserId, file.FileMd5).First(&resFile).Error, gorm.ErrRecordNotFound) {
+		err = global.QY_Db.Where("file_name = ? and file_md5 = ? and user_id = ?", file.FileName, file.FileMd5, file.UserId).First(&resFile).Error
+		// 如果没有找到记录，则根据file模板创建新记录
 		file.FileState = false
-		err = global.QY_Db.Where("file_name = ? and file_md5 = ? and user_id = ?", file.FileName, file.FileMd5, file.UserId).Preload("ChunkList").FirstOrCreate(&resFile, file).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			resFile = file                         // 这里将file的内容赋给resFile
+			err = global.QY_Db.Create(&file).Error // 创建新记录
+			if err != nil {
+				return resFile, err
+			}
+		}
+		if err == nil {
+			global.QY_Db.Preload("ChunkList").First(&resFile)
+		}
 	}
 	return resFile, err
 }

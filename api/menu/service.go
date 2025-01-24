@@ -9,10 +9,10 @@ import (
 
 func InitRouterDb() error {
 	routerList := []SysBaseMenu{
-		{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "仪表盘", Component: "view/superAdmin/index.vue"},
+		{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "仪表盘", Component: "view/Home/index.vue"},
 		{UID: 2, ParentId: 0, Path: "admin", Name: "superAdmin", Label: "超级管理员", Component: "view/superAdmin/index.vue"},
-		{UID: 3, ParentId: 0, Path: "file", Name: "file", Label: "文件操作", Component: "view/superAdmin/index.vue"},
-		{UID: 4, ParentId: 3, Path: "upload_file", Name: "upload_file", Label: "文件上传", Component: "view/superAdmin/index.vue"},
+		{UID: 3, ParentId: 0, Path: "file", Name: "file", Label: "文件操作"},
+		{UID: 4, ParentId: 3, Path: "upload_file", Name: "upload_file", Label: "文件上传", Component: "view/file/upload/index.vue"},
 	}
 	for _, router := range routerList {
 		// 检查是否已存在

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"file_service/api/file"
 	"file_service/global"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -30,5 +31,6 @@ func FindAllListByUserId(userId uint) ([]LikeFile, error) {
 func FindMusicListByFileVal(val string) ([]file.File, error) {
 	var files []file.File
 	err := global.QY_Db.Where("file_name LIKE  ?", "%"+val+"%").Find(&files).Error
+	fmt.Println(files)
 	return files, err
 }
