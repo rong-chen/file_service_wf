@@ -30,14 +30,24 @@ func CreateOrFindFile(file File) (resFile File, err error) {
 	return resFile, err
 }
 
-func FindFileRow(userId uint, types []string) (list []File, err error) {
-	if userId == 0 {
-		if len(types) != 0 {
-			err = global.QY_Db.Where("file_type IN ?", types).Find(&list).Error
-		}
-	} else {
-		err = global.QY_Db.Where("user_id = ?", userId).Preload("ChunkList").Find(&list).Error
+func FindFileRow(userId uint, params QueryParams) (list []File, err error, total int64) {
+	query := global.QY_Db.Model(&File{}).Where("user_id = ?", userId)
+	if params.isSort {
+		query = query.Order("weight desc")
 	}
+	if params.FileType != "" {
+		query = query.Where("file_type = ?  ", params.FileType)
+	}
+	if params.FileName != "" {
+		query = query.Where("file_name LIKE ?", "%"+params.FileName+"%")
+	}
+	err = query.Count(&total).Error // 先统计总数
+	offset := (params.Page - 1) * params.PageSize
+	query = query.Offset(offset).Limit(params.PageSize)
+	if err != nil {
+		return
+	}
+	err = query.Preload("ChunkList").Find(&list).Error
 	return
 }
 
@@ -119,6 +129,13 @@ func UpdateFileState(id uint, filePath string) {
 		"file_state": true,
 		"file_path":  filePath,
 	})
+}
+
+func CollectionFile(i int, id uint) error {
+	err := global.QY_Db.Model(&File{}).Where("id = ?", id).Updates(map[string]interface{}{
+		"weight": i,
+	}).Error
+	return err
 }
 
 func RemoveChunk(FileMd5 string) error {

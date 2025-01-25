@@ -6,7 +6,6 @@ import (
 	"github.com/gofrs/uuid/v5"
 	"io"
 	"strconv"
-	"strings"
 )
 
 func FindFile(c *gin.Context) {
@@ -31,23 +30,43 @@ func FindFile(c *gin.Context) {
 
 func FindFileList(c *gin.Context) {
 	userId, _ := c.Get("user_id")
-	row, err := FindFileRow(userId.(uint), []string{})
+	params := parseQueryParams(c)
+	row, err, count := FindFileRow(userId.(uint), params)
 	if err != nil {
 		response.FailWithMessage("获取失败："+err.Error(), c)
 		return
 	}
-	response.OkWithData(row, "获取成功", c)
+	response.OkWithData(map[string]interface{}{
+		"list":  row,
+		"total": count,
+	}, "获取成功", c)
+}
+
+func Collection(c *gin.Context) {
+	var cp CollectionParams
+	err := c.BindJSON(&cp)
+	if err != nil {
+		response.FailWithMessage("参数错误", c)
+		return
+	}
+	err = CollectionFile(cp.Weight, cp.Id)
+	if err != nil {
+		response.FailWithMessage("网络错误", c)
+		return
+	}
+	response.OkWithMessage("收藏成功", c)
 }
 
 func FindAllFileList(c *gin.Context) {
-	types, _ := c.GetQuery("type")
-	result := strings.Split(types, "|")
-	row, err := FindFileRow(0, result)
-	if err != nil {
-		response.FailWithMessage("获取失败："+err.Error(), c)
-		return
-	}
-	response.OkWithData(row, "获取成功", c)
+	//types, _ := c.GetQuery("type")
+	//
+	//result := strings.Split(types, "|")
+	//row, err := FindFileRow(0, result)
+	//if err != nil {
+	//	response.FailWithMessage("获取失败："+err.Error(), c)
+	//	return
+	//}
+	//response.OkWithData(row, "获取成功", c)
 }
 
 func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
