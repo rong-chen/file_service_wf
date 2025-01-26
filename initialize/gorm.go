@@ -2,11 +2,10 @@ package initialize
 
 import (
 	"file_service/api/authority"
-	"file_service/api/collection_file"
 	"file_service/api/file"
+	"file_service/api/file_collection"
 	"file_service/api/menu"
 	"file_service/api/user"
-	"file_service/api/user_authority"
 	"file_service/config"
 	"file_service/global"
 	"fmt"
@@ -99,15 +98,29 @@ func RegisterTables() {
 	db := global.QY_Db
 	err := db.AutoMigrate(
 		user.Users{},
-		user_authority.UserAuthority{},
 		authority.Authorities{},
 		file.FileChunk{},
 		file.File{},
-		collection_file.LikeFile{},
-		menu.SysBaseMenu{},
-		//file.ExaFileUploadAndDownload{},
+		file_collection.LikeFile{},
+		menu.BaseMenu{},
+		authority.AuthoritiesMenu{},
 	)
 	if err != nil {
 		os.Exit(0)
+	}
+}
+
+func InitDbData() {
+	err := menu.InitMenuDbData()
+	if err != nil {
+		return
+	}
+	err = user.InitUserDbData()
+	if err != nil {
+		return
+	}
+	err = authority.InitAuthoritiesData()
+	if err != nil {
+		return
 	}
 }

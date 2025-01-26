@@ -1,8 +1,8 @@
 package router
 
 import (
-	"file_service/api/collection_file"
 	"file_service/api/file"
+	"file_service/api/file_collection"
 	"file_service/api/menu"
 	"file_service/api/user"
 	"github.com/gin-gonic/gin"
@@ -18,6 +18,6 @@ var NoCheckRoutersList = []Routers{
 var CheckRoutersList = []Routers{
 	&user.UserInfoRouter{},
 	&file.Router{},
-	&collection_file.Router{},
+	&file_collection.Router{},
 	&menu.Router{},
 }

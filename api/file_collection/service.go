@@ -1,4 +1,4 @@
-package collection_file
+package file_collection
 
 import (
 	"errors"

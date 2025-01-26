@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"file_service/api/user"
 	"file_service/model/common/requests"
 	"file_service/utils"
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,13 @@ func JWTAuth() gin.HandlerFunc {
 			requests.NoAuth("非法访问", c)
 			c.Abort()
 		}
+		users := user.ContextUser.FindUserInfo("id", claims.UserId)
+		if !users.IsExamine {
+			requests.NoAuthority("请等待管理员审核", c)
+			c.Abort()
+		}
 		c.Set("user_id", claims.UserId)
+		c.Set("authorityId", users.AuthorityId)
 		c.Next()
 	}
 }

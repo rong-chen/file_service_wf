@@ -67,6 +67,13 @@ func RegisterUser(c *gin.Context) {
 	response.OkWithMessage("注册成功", c)
 }
 
+func List(c *gin.Context) {
+	list := ContextUser.FindAllUserInfo()
+	response.OkWithData(map[string]interface{}{
+		"list": list,
+	}, "获取成功", c)
+}
+
 func GetUserInfo(c *gin.Context) {
 	userId, _ := c.Get("user_id")
 	u := ContextUser.FindUserInfo("id", userId)

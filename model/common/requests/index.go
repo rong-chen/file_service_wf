@@ -18,3 +18,10 @@ func NoAuth(message string, c *gin.Context) {
 		message,
 	})
 }
+func NoAuthority(message string, c *gin.Context) {
+	c.JSON(http.StatusUnauthorized, Response{
+		8,
+		nil,
+		message,
+	})
+}

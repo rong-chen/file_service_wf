@@ -29,3 +29,8 @@ func (us *service) FindUserInfo(key string, val interface{}) (u Users) {
 	global.QY_Db.Where(fmt.Sprintf("%s = ?", key), val).First(&u)
 	return
 }
+
+func (us *service) FindAllUserInfo() (u []Users) {
+	global.QY_Db.Find(&u)
+	return
+}
