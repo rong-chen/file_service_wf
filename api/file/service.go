@@ -145,3 +145,8 @@ func RemoveChunk(FileMd5 string) error {
 	err := os.RemoveAll(breakpointDir + FileMd5)
 	return err
 }
+
+func FindFileById(id uint) (file File, err error) {
+	err = global.QY_Db.Model(&File{}).Where("id = ?", id).First(&file).Error
+	return
+}

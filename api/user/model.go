@@ -13,7 +13,7 @@ type Users struct {
 	Password       string    `json:"password" form:"password"  gorm:"column:password;comment:密码" binding:"required"`
 	ProfilePicture string    `json:"profile_picture" gorm:"column:profile_picture;comment:头像"`
 	AuthorityId    uint      `json:"authority_id" gorm:"column:authority_id;comment:权限ID"`
-	IsExamine      bool      `json:"is_examine" gorm:"column:is_examine;comment:是否通过审核;default:false"`
+	IsExamine      bool      `json:"isExamine" gorm:"column:is_examine;comment:是否通过审核;default:false"`
 	global.QyModel
 }
 

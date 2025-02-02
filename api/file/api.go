@@ -57,10 +57,21 @@ func Collection(c *gin.Context) {
 	}
 	response.OkWithMessage("收藏成功", c)
 }
+
 func DownLoadFile(c *gin.Context) {
-	filePath := c.Param("filePath")
-	filePath = strings.TrimPrefix(filePath, "/")
-	response.CallBackFile(filePath, c)
+	fileId := c.Param("fileId")
+	fileId = strings.TrimPrefix(fileId, "/")
+	uintId, err := strconv.ParseUint(fileId, 10, 0)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	file, err := FindFileById(uint(uintId))
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.CallBackFile(file.FilePath, file.FileName, c)
 }
 
 func FindAllFileList(c *gin.Context) {

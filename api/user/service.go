@@ -34,3 +34,9 @@ func (us *service) FindAllUserInfo() (u []Users) {
 	global.QY_Db.Find(&u)
 	return
 }
+
+func (us *service) UpdateIsExamine(id uint, b bool) error {
+	return global.QY_Db.Model(&Users{}).Where("id = ?", id).Select("is_examine").Updates(map[string]interface{}{
+		"is_examine": b,
+	}).Error
+}
