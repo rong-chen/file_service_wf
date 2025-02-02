@@ -6,6 +6,7 @@ import (
 	"github.com/gofrs/uuid/v5"
 	"io"
 	"strconv"
+	"strings"
 )
 
 func FindFile(c *gin.Context) {
@@ -55,6 +56,11 @@ func Collection(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("收藏成功", c)
+}
+func DownLoadFile(c *gin.Context) {
+	filePath := c.Param("filePath")
+	filePath = strings.TrimPrefix(filePath, "/")
+	response.CallBackFile(filePath, c)
 }
 
 func FindAllFileList(c *gin.Context) {

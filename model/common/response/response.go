@@ -38,3 +38,7 @@ func FailWithMessage(message string, c *gin.Context) {
 func OkWithData(data interface{}, message string, c *gin.Context) {
 	Result(SUCCESS, data, message, c)
 }
+
+func CallBackFile(path string, c *gin.Context) {
+	c.File(path)
+}

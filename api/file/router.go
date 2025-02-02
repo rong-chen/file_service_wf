@@ -20,5 +20,7 @@ func (Router) InitRouter(g *gin.RouterGroup) {
 		router.GET("all-file-list", FindAllFileList)
 		// 收藏文件
 		router.POST("collection", Collection)
+		// 下载文件
+		router.GET("download/*filePath", DownLoadFile)
 	}
 }

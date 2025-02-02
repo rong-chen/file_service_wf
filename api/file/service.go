@@ -41,6 +41,9 @@ func FindFileRow(userId uint, params QueryParams) (list []File, err error, total
 	if params.FileName != "" {
 		query = query.Where("file_name LIKE ?", "%"+params.FileName+"%")
 	}
+	if params.Id != 0 {
+		query = query.Where("id = ?", params.Id)
+	}
 	err = query.Count(&total).Error // 先统计总数
 	offset := (params.Page - 1) * params.PageSize
 	query = query.Offset(offset).Limit(params.PageSize)

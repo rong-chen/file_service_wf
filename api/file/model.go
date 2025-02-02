@@ -37,6 +37,7 @@ type QueryParams struct {
 	Page     int
 	PageSize int
 	isSort   bool
+	Id       uint
 }
 
 type CollectionParams struct {
