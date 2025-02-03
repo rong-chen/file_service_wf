@@ -47,12 +47,12 @@ func Collection(c *gin.Context) {
 	var cp CollectionParams
 	err := c.BindJSON(&cp)
 	if err != nil {
-		response.FailWithMessage("参数错误", c)
+		response.FailWithMessage("参数错误"+err.Error(), c)
 		return
 	}
 	err = CollectionFile(cp.Weight, cp.Id)
 	if err != nil {
-		response.FailWithMessage("网络错误", c)
+		response.FailWithMessage("网络错误"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("收藏成功", c)
@@ -117,13 +117,13 @@ func UploadChunkFile(c *gin.Context) {
 	}
 	f, err := FileHeader.Open()
 	if err != nil {
-		response.FailWithMessage("文件读取失败", c)
+		response.FailWithMessage("文件读取失败"+err.Error(), c)
 		return
 	}
 	cen, _ := io.ReadAll(f)
 	//此处要添加md5校验
 	if !CheckMd5(cen, chunkMd5) {
-		response.FailWithMessage("检查md5失败", c)
+		response.FailWithMessage("文件检查md5失败", c)
 		return
 	}
 
@@ -136,13 +136,13 @@ func UploadChunkFile(c *gin.Context) {
 	files.UserId = userId.(uint)
 	findFile, err := CreateOrFindFile(files)
 	if err != nil {
-		response.FailWithMessage("查找或创建记录失败", c)
+		response.FailWithMessage("文件查找或创建记录失败"+err.Error(), c)
 		return
 	}
 	fileNamePath := findFile.FilePathName.String()
 	pathC, err := BreakPointContinue(cen, fileNamePath, chunkNumber, fileMd5)
 	if err != nil {
-		response.FailWithMessage("断点续传失败", c)
+		response.FailWithMessage("文件断点续传失败"+err.Error(), c)
 		return
 	}
 	if err = CreateFileChunk(findFile.ID, pathC, chunkNumber); err != nil {
@@ -158,7 +158,7 @@ func UploadSuccess(c *gin.Context) {
 	// 文件名称
 	fileName, ok2 := c.GetQuery("fileName")
 	if !ok2 || !ok {
-		response.FailWithMessage("参数不完整", c)
+		response.FailWithMessage("上传文件参数不完整", c)
 		return
 	}
 	// 用户id
@@ -169,7 +169,7 @@ func UploadSuccess(c *gin.Context) {
 	files.UserId = userId.(uint)
 	findFile, err := CreateOrFindFile(files)
 	if err != nil {
-		response.FailWithMessage("查找或创建记录失败", c)
+		response.FailWithMessage("查找或创建记录失败"+err.Error(), c)
 		return
 	}
 	fileNamePath := findFile.FilePathName.String()

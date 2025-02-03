@@ -19,9 +19,11 @@ func InitAuthoritiesData() error {
 		if err := global.QY_Db.Where("authority_id = ?", item.AuthorityId).First(&author).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				if createErr := global.QY_Db.Create(&item).Error; createErr != nil {
+					global.QY_LOG.Error(fmt.Sprintf("插入权限数据失败: %s", createErr.Error()))
 					return fmt.Errorf("插入权限数据失败: %w", createErr)
 				}
 			} else {
+				global.QY_LOG.Error(fmt.Sprintf("检查权限数据失败: %s", err.Error()))
 				return fmt.Errorf("检查权限数据失败: %w", err)
 			}
 		}

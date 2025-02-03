@@ -16,9 +16,10 @@ func List(c *gin.Context) {
 	users := user.ContextUser.FindUserInfo("id", id.(uint))
 	authorities, err := authority.FindAuthorities(users.AuthorityId)
 	if err != nil {
-		response.FailWithMessage("查询失败", c)
+		response.FailWithMessage("查询失败"+err.Error(), c)
 		return
 	}
+
 	var menuIds []uint
 	for _, v := range authorities {
 		menuIds = append(menuIds, v.MenuId)
@@ -26,7 +27,7 @@ func List(c *gin.Context) {
 
 	list, err := FindMenuList(menuIds)
 	if err != nil {
-		response.FailWithMessage("查询失败", c)
+		response.FailWithMessage("查询失败"+err.Error(), c)
 		return
 	}
 	response.OkWithData(list, "", c)

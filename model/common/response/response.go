@@ -1,6 +1,7 @@
 package response
 
 import (
+	"file_service/global"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
@@ -37,6 +38,7 @@ func OkWithMessage(message string, c *gin.Context) {
 }
 
 func FailWithMessage(message string, c *gin.Context) {
+	global.QY_LOG.Error(message)
 	Result(ERROR, map[string]interface{}{}, message, c)
 }
 
@@ -62,7 +64,6 @@ func CallBackFile(filePath string, fileName string, c *gin.Context) {
 			return
 		}
 		defer file.Close()
-
 		// 获取文件大小并设置响应头
 		fileInfo, err := file.Stat()
 		if err != nil {

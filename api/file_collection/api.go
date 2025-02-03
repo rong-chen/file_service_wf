@@ -22,7 +22,7 @@ func Like(c *gin.Context) {
 	}
 	err = CreateLikeFile(lf)
 	if err != nil {
-		response.FailWithMessage("", c)
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	response.OkWithMessage("操作成功", c)

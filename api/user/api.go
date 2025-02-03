@@ -17,7 +17,7 @@ func Login(c *gin.Context) {
 	var p Params
 	err := c.ShouldBindJSON(&p)
 	if err != nil {
-		response.FailWithMessage("帐号密码有误", c)
+		response.FailWithMessage("帐号密码有误"+err.Error(), c)
 		return
 	}
 	u := ContextUser.FindUserInfo("account", p.Account)
@@ -31,6 +31,7 @@ func Login(c *gin.Context) {
 	}
 	token, err := utils.JWTAPP.CreateToken(u.ID)
 	if err != nil {
+		response.FailWithMessage("token创建失败"+err.Error(), c)
 		return
 	}
 	response.OkWithData(map[string]interface{}{
@@ -59,7 +60,7 @@ func RegisterUser(c *gin.Context) {
 		}
 		if err != nil {
 			// 保存错误
-			response.FailWithMessage("图头像上传失败", c)
+			response.FailWithMessage("图头像上传失败"+err.Error(), c)
 			return
 		}
 	}
@@ -115,7 +116,7 @@ func ConsentRegister(c *gin.Context) {
 	var p Params
 	err := c.ShouldBindJSON(&p)
 	if err != nil {
-		response.FailWithMessage("变更失败", c)
+		response.FailWithMessage("变更失败"+err.Error(), c)
 		return
 
 	}
@@ -125,7 +126,7 @@ func ConsentRegister(c *gin.Context) {
 
 	err = ContextUser.UpdateIsExamine(p.Id, p.IsExamine)
 	if err != nil {
-		response.FailWithMessage("变更失败", c)
+		response.FailWithMessage("变更失败"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("获取成功", c)
