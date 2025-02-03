@@ -49,8 +49,10 @@ func CallBackFile(filePath string, fileName string, c *gin.Context) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			FailWithMessage("文件不存在", c)
+			return
 		} else {
 			FailWithMessage("检查文件时发生错误", c)
+			return
 		}
 	} else {
 		// 手动打开文件并传输
@@ -72,11 +74,11 @@ func CallBackFile(filePath string, fileName string, c *gin.Context) {
 		encodedFileName := url.QueryEscape(fileName)
 		c.Header("Content-Disposition", "attachment; filename*=UTF-8''"+encodedFileName)
 		c.Header("Content-Length", size) // 明确设置文件大小
-
 		// 将文件流传输给客户端
 		_, err = io.Copy(c.Writer, file)
 		if err != nil {
 			FailWithMessage("文件传输失败", c)
+			return
 		}
 	}
 }
