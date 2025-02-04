@@ -74,6 +74,10 @@ func DownLoadFile(c *gin.Context) {
 	response.CallBackFile(file.FilePath, file.FileName, c)
 }
 
+func Delete(c *gin.Context) {
+
+}
+
 func FindAllFileList(c *gin.Context) {
 	//types, _ := c.GetQuery("type")
 	//

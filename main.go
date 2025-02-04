@@ -12,8 +12,8 @@ func main() {
 	global.QY_LOG = initialize.NewLogContext()
 	global.QY_LOG.Info("log日志启动")
 	if global.QY_Db != nil {
-		initialize.RegisterTables() // 初始化表
-		initialize.InitDbData()     // 初始化表数据
+		//initialize.RegisterTables() // 初始化表
+		//initialize.InitDbData()     // 初始化表数据
 	}
 	defer func() {
 		if global.QY_LOG != nil {

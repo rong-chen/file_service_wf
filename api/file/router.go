@@ -22,5 +22,6 @@ func (Router) InitRouter(g *gin.RouterGroup) {
 		router.POST("collection", Collection)
 		// 下载文件
 		router.GET("download/*fileId", DownLoadFile)
+		router.DELETE("delete", Delete)
 	}
 }
