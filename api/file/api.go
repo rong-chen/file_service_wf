@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid/v5"
 	"io"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -72,10 +73,58 @@ func DownLoadFile(c *gin.Context) {
 		return
 	}
 	response.CallBackFile(file.FilePath, file.FileName, c)
+
 }
 
 func Delete(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+	userId := c.MustGet("user_id").(uint)
+	if !ok {
+		response.FailWithMessage("网络异常", c)
+		return
+	}
+	uintId, err := strconv.ParseUint(id, 10, 0)
+	if err != nil {
+		response.FailWithMessage("参数异常", c)
+		return
+	}
+	file, err := FindFileById(uint(uintId))
+	if err != nil {
+		response.FailWithMessage("网络异常"+err.Error(), c)
+		return
+	}
+	if file.UserId != userId {
+		response.FailWithMessage("无权利删除", c)
+		return
+	}
 
+	if file.FilePath != "" {
+		_, err := os.Stat(file.FilePath)
+		if err == nil {
+			err = os.Remove(file.FilePath)
+			if err != nil {
+				response.FailWithMessage("删除文件失败:"+err.Error(), c)
+				return
+			}
+		}
+	} else {
+		_, err = os.Stat(breakpointDir + file.FileMd5)
+		if err == nil {
+			err = os.RemoveAll(breakpointDir + file.FileMd5)
+			if err != nil {
+				response.FailWithMessage("删除子文件失败:"+err.Error(), c)
+				return
+			}
+		}
+	}
+
+	err = DeleteFileById(file.ID)
+	if err != nil {
+		response.FailWithMessage("网络"+err.Error(), c)
+		return
+	}
+
+	response.OkWithMessage("删除成功", c)
 }
 
 func FindAllFileList(c *gin.Context) {

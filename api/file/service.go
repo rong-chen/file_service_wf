@@ -150,3 +150,8 @@ func FindFileById(id uint) (file File, err error) {
 	err = global.QY_Db.Model(&File{}).Where("id = ?", id).First(&file).Error
 	return
 }
+
+func DeleteFileById(id uint) (err error) {
+	err = global.QY_Db.Where("id = ?", id).Delete(&File{}).Error
+	return
+}

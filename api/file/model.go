@@ -29,6 +29,7 @@ type FileChunk struct {
 	FileId      uint   `json:"file_id" gorm:"column:file_id;comment:文件id"`
 	ChunkNumber int    `json:"chunk_number" gorm:"column:chunk_number;comment:文件切片数量"`
 	ChunkPath   string `json:"chunk_path" gorm:"column:chunk_path;comment:文件切片路径"`
+	ParsePath   string `json:"parse_path" gorm:"column:parse_path;comment:切片父路径"`
 }
 
 type QueryParams struct {
