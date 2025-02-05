@@ -9,6 +9,7 @@ import (
 	"file_service/config"
 	"file_service/global"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -92,6 +93,16 @@ func GormMysql() *gorm.DB {
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
 		return db
 	}
+}
+
+func GormRedis() *redis.Client {
+	rc := global.QY_CONFIG.Redis
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     rc.Addr,
+		Password: rc.Password, // no password set
+		DB:       0,           // use default DB
+	})
+	return rdb
 }
 
 func RegisterTables() {

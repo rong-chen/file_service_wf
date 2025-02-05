@@ -1,6 +1,8 @@
 package file
 
 import (
+	"context"
+	"file_service/global"
 	"file_service/model/common/response"
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid/v5"
@@ -59,21 +61,46 @@ func Collection(c *gin.Context) {
 	response.OkWithMessage("收藏成功", c)
 }
 
-func DownLoadFile(c *gin.Context) {
+func RegisterDownloadKey(c *gin.Context) {
 	fileId := c.Param("fileId")
-	fileId = strings.TrimPrefix(fileId, "/")
-	uintId, err := strconv.ParseUint(fileId, 10, 0)
+	userId := c.MustGet("user_id").(uint)
+	intFileId, err := strconv.Atoi(fileId)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	file, err := FindFileById(uint(uintId))
+	fileInfo, err := FindFileById(uint(intFileId))
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		response.FailWithMessage("查询失败"+err.Error(), c)
 		return
 	}
-	response.CallBackFile(file.FilePath, file.FileName, c)
+	if fileInfo.UserId != userId {
+		response.FailWithMessage("暂无下载权限", c)
+		return
+	}
+	//temKey, _ := uuid.NewV1()
+	//uuidWithoutHyphen := strings.ReplaceAll(temKey.String(), "-", "")
+	//filePath := strings.Replace(fileInfo.FilePath, ".", "", 1)
+	//global.QY_Redis.Set(context.Background(), uuidWithoutHyphen, "/api"+filePath, time.Second*20)
+	//response.OkWithData(uuidWithoutHyphen, "获取秘钥成功", c)
+	//
+	//c.Header("Content-Disposition", "attachment; filename=your_file.zip")
+	//c.Header("Content-Type", "application/octet-stream")
+	//c.Header("Content-Transfer-Encoding", "binary")
+	//
+	//// 使用 c.File 发送文件
+	//c.File(fileInfo.FilePath)
+}
 
+func DownLoadFile(c *gin.Context) {
+	key := c.Param("key")
+	key = strings.TrimPrefix(key, "/")
+	result, err := global.QY_Redis.Get(context.Background(), key).Result()
+	if err != nil {
+		response.FailWithMessage("秘钥失效", c)
+		return
+	}
+	response.OkWithData(result, "获取连接成功", c)
 }
 
 func Delete(c *gin.Context) {

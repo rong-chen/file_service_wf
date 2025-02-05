@@ -20,8 +20,10 @@ func (Router) InitRouter(g *gin.RouterGroup) {
 		router.GET("all-file-list", FindAllFileList)
 		// 收藏文件
 		router.POST("collection", Collection)
+		// 获取下载key
+		router.GET("download-key/:fileId", RegisterDownloadKey)
 		// 下载文件
-		router.GET("download/*fileId", DownLoadFile)
+		router.GET("download/*key", DownLoadFile)
 		router.DELETE("delete", Delete)
 	}
 }

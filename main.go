@@ -7,10 +7,12 @@ import (
 )
 
 func main() {
-	global.QY_VP = core.Viper()           // 初始化Viper
-	global.QY_Db = initialize.GormMysql() // gorm连接数据库
+	global.QY_VP = core.Viper()              // 初始化Viper
+	global.QY_Db = initialize.GormMysql()    // gorm连接数据库
+	global.QY_Redis = initialize.GormRedis() // gorm连接数据库
 	global.QY_LOG = initialize.NewLogContext()
-	global.QY_LOG.Info("log日志启动")
+	// 备份数据协程
+	go initialize.Ticker()
 	if global.QY_Db != nil {
 		initialize.RegisterTables() // 初始化表
 		initialize.InitDbData()     // 初始化表数据
