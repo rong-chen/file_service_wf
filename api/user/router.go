@@ -20,7 +20,9 @@ func (u *UserInfoRouter) InitRouter(Router *gin.RouterGroup) {
 	router := Router.Group("user")
 	{
 		router.GET("/info", GetUserInfo)
+		//同意注册用户
 		router.POST("/consent", ConsentRegister)
+		// 用户列表
 		router.GET("/list", List)
 	}
 }

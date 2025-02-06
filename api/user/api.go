@@ -86,6 +86,9 @@ func List(c *gin.Context) {
 		return
 	}
 	list := ContextUser.FindAllUserInfo()
+	for i, _ := range list {
+		list[i].Password = ""
+	}
 	response.OkWithData(map[string]interface{}{
 		"list": list,
 	}, "获取成功", c)

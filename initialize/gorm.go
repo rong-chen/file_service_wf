@@ -112,6 +112,7 @@ func RegisterTables() {
 		authority.Authorities{},
 		file.FileChunk{},
 		file.File{},
+		file.ShareFileInfo{},
 		file_collection.LikeFile{},
 		menu.BaseMenu{},
 		authority.AuthoritiesMenu{},

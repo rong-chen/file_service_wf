@@ -15,7 +15,6 @@ func CreateOrFindFile(file File) (resFile File, err error) {
 	if errors.Is(global.QY_Db.Where("file_name = ? and file_state = ? and user_id = ? and file_md5 = ? ", file.FileName, true, file.UserId, file.FileMd5).First(&resFile).Error, gorm.ErrRecordNotFound) {
 		err = global.QY_Db.Where("file_name = ? and file_md5 = ? and user_id = ?", file.FileName, file.FileMd5, file.UserId).First(&resFile).Error
 		// 如果没有找到记录，则根据file模板创建新记录
-		file.FileState = false
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			resFile = file                         // 这里将file的内容赋给resFile
 			err = global.QY_Db.Create(&file).Error // 创建新记录
@@ -154,4 +153,25 @@ func FindFileById(id uint) (file File, err error) {
 func DeleteFileById(id uint) (err error) {
 	err = global.QY_Db.Where("id = ?", id).Delete(&File{}).Error
 	return
+}
+
+func CreateShareFile(sf ShareFileInfo) (ShareFileInfo, error) {
+	// 查找是否已经存在相同的记录
+	var existingShareFile ShareFileInfo
+	result := global.QY_Db.Where("from_user = ? AND to_user = ? AND file_id = ?", sf.FromUser, sf.ToUser, sf.FileId).First(&existingShareFile)
+	// 如果找不到记录，则插入新记录
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			// 没有记录，插入新数据
+			if err := global.QY_Db.Create(&sf).Error; err != nil {
+				return existingShareFile, err
+			} else {
+				return existingShareFile, nil
+			}
+		} else {
+			return existingShareFile, result.Error
+		}
+	} else {
+		return existingShareFile, nil
+	}
 }

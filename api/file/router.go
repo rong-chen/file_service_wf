@@ -24,6 +24,9 @@ func (Router) InitRouter(g *gin.RouterGroup) {
 		router.GET("download-key/:fileId", RegisterDownloadKey)
 		// 下载文件
 		router.GET("download/*key", DownLoadFile)
+		//删除文件
 		router.DELETE("delete", Delete)
+		// 创建共享文件
+		router.POST("share", Share)
 	}
 }

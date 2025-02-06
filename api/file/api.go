@@ -2,6 +2,7 @@ package file
 
 import (
 	"context"
+	"file_service/api/user"
 	"file_service/global"
 	"file_service/model/common/response"
 	"github.com/gin-gonic/gin"
@@ -150,8 +151,44 @@ func Delete(c *gin.Context) {
 		response.FailWithMessage("网络"+err.Error(), c)
 		return
 	}
-
 	response.OkWithMessage("删除成功", c)
+}
+
+func Share(c *gin.Context) {
+	var sf ShareFileInfo
+	err := c.ShouldBindJSON(&sf)
+	if err != nil {
+		response.FailWithMessage("参数错误"+err.Error(), c)
+		return
+	}
+	share, err := CreateShareFile(sf)
+	if share.ID != 0 {
+		response.FailWithMessage("请勿重复添加", c)
+		return
+	}
+
+	file, err := FindFileById(sf.FileId)
+	if err != nil {
+		response.FailWithMessage("添加失败"+err.Error(), c)
+		return
+	}
+	if !file.FileState {
+		response.FailWithMessage("文件残缺", c)
+		return
+	}
+	users := user.ContextUser.FindUserInfo("id", sf.FromUser)
+	file.IsShare = true
+	file.ShareUserId = sf.FromUser
+	file.UserId = sf.ToUser
+	file.ShareAccountName = users.AccountName
+	file.ID = 0
+	file.Widget = 0
+	_, err = CreateOrFindFile(file)
+	if err != nil {
+		response.FailWithMessage("添加失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("添加成功", c)
 }
 
 func FindAllFileList(c *gin.Context) {
