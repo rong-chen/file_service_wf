@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func FindFile(c *gin.Context) {
@@ -22,6 +23,18 @@ func FindFile(c *gin.Context) {
 		response.FailWithMessage("参数错误:"+err.Error(), c)
 		return
 	}
+
+	users := user.ContextUser.FindUserInfo("id", file.UserId)
+	if (users.DiskSize) < (users.UseDiskSize + file.FileSize) {
+		response.FailWithMessage("可用容量不够，请联系管理员扩容", c)
+		return
+	}
+	err = user.ContextUser.UpdateUseDiskSize(users.ID, users.UseDiskSize+file.FileSize)
+	if err != nil {
+		response.FailWithMessage("变更容量失败："+err.Error(), c)
+		return
+	}
+
 	file.FilePathName, _ = uuid.NewV1()
 	findFile, err := CreateOrFindFile(file)
 	if err != nil {
@@ -79,29 +92,24 @@ func RegisterDownloadKey(c *gin.Context) {
 		response.FailWithMessage("暂无下载权限", c)
 		return
 	}
-	//temKey, _ := uuid.NewV1()
-	//uuidWithoutHyphen := strings.ReplaceAll(temKey.String(), "-", "")
-	//filePath := strings.Replace(fileInfo.FilePath, ".", "", 1)
-	//global.QY_Redis.Set(context.Background(), uuidWithoutHyphen, "/api"+filePath, time.Second*20)
-	//response.OkWithData(uuidWithoutHyphen, "获取秘钥成功", c)
-	//
-	//c.Header("Content-Disposition", "attachment; filename=your_file.zip")
-	//c.Header("Content-Type", "application/octet-stream")
-	//c.Header("Content-Transfer-Encoding", "binary")
-	//
-	//// 使用 c.File 发送文件
-	//c.File(fileInfo.FilePath)
+	uid, _ := uuid.NewV1()
+	result := strings.ReplaceAll(uid.String(), "-", "")
+	global.QY_Redis.Set(context.Background(), result, fileId, time.Minute*30)
+	// global.QY_Redis.HSet(context.Background(), result, "fileId", "Alice", "age", 30)
+	response.OkWithData(map[string]string{
+		"key": result,
+	}, "生成成功", c)
 }
 
 func DownLoadFile(c *gin.Context) {
 	key := c.Param("key")
 	key = strings.TrimPrefix(key, "/")
-	result, err := global.QY_Redis.Get(context.Background(), key).Result()
+	id, err := global.QY_Redis.Get(context.Background(), key).Result()
 	if err != nil {
 		response.FailWithMessage("秘钥失效", c)
 		return
 	}
-	response.OkWithData(result, "获取连接成功", c)
+	response.OkWithData(id, "获取连接成功", c)
 }
 
 func Delete(c *gin.Context) {

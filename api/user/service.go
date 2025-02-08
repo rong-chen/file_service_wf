@@ -40,3 +40,8 @@ func (us *service) UpdateIsExamine(id uint, b bool) error {
 		"is_examine": b,
 	}).Error
 }
+func (us *service) UpdateUseDiskSize(id uint, size uint64) error {
+	return global.QY_Db.Model(&Users{}).Where("id = ?", id).Select("use_disk_size").Updates(map[string]interface{}{
+		"use_disk_size": size,
+	}).Error
+}

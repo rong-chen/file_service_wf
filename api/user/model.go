@@ -14,6 +14,8 @@ type Users struct {
 	ProfilePicture string    `json:"profile_picture" gorm:"column:profile_picture;comment:头像"`
 	AuthorityId    uint      `json:"authority_id" gorm:"column:authority_id;comment:权限ID"`
 	IsExamine      bool      `json:"isExamine" gorm:"column:is_examine;comment:是否通过审核;default:false"`
+	DiskSize       uint64    `json:"disk_size"  gorm:"column:disk_size;comment:用户可使用磁盘大小;default:0"`
+	UseDiskSize    uint64    `json:"use_disk_size"  gorm:"column:use_disk_size;comment:已使用;default:0"`
 	global.QyModel
 }
 

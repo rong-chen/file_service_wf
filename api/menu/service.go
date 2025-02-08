@@ -6,7 +6,7 @@ import (
 
 func FindMenuList(menuIds []uint) (menuTree []BaseMenu, err error) {
 	var list []BaseMenu
-	err = global.QY_Db.Where("id in ?", menuIds).Find(&list).Error
+	err = global.QY_Db.Where("uid in ?", menuIds).Find(&list).Error
 	menuTree = buildMenuTree(list, 0)
 	return
 }

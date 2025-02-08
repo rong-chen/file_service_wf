@@ -21,6 +21,7 @@ func CreateOrFindFile(file File) (resFile File, err error) {
 			if err != nil {
 				return resFile, err
 			}
+			return resFile, nil
 		}
 		if err == nil {
 			global.QY_Db.Preload("ChunkList").First(&resFile)
