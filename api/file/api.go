@@ -106,10 +106,31 @@ func DownLoadFile(c *gin.Context) {
 	key = strings.TrimPrefix(key, "/")
 	id, err := global.QY_Redis.Get(context.Background(), key).Result()
 	if err != nil {
-		response.FailWithMessage("秘钥失效", c)
+		response.FailWithMessage("秘钥失效"+err.Error(), c)
 		return
 	}
 	response.OkWithData(id, "获取连接成功", c)
+}
+
+func DownLoadFileV2(c *gin.Context) {
+	key := c.Param("key")
+	key = strings.TrimPrefix(key, "/")
+	id, err := global.QY_Redis.Get(context.Background(), key).Result()
+	if err != nil {
+		response.FailWithMessage("秘钥失效"+err.Error(), c)
+		return
+	}
+	parseUint, err := strconv.ParseUint(id, 10, 0)
+	if err != nil {
+		response.FailWithMessage("网络错误"+err.Error(), c)
+		return
+	}
+	file, err := FindFileById(uint(parseUint))
+	if err != nil {
+		response.FailWithMessage("网络错误"+err.Error(), c)
+		return
+	}
+	c.File(file.FilePath)
 }
 
 func Delete(c *gin.Context) {
