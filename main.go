@@ -14,8 +14,8 @@ func main() {
 	// 备份数据协程
 	go initialize.Ticker()
 	if global.QY_Db != nil {
-		//initialize.RegisterTables() // 初始化表
-		//initialize.InitDbData()     // 初始化表数据
+		initialize.RegisterTables() // 初始化表
+		initialize.InitDbData()     // 初始化表数据
 	}
 	defer func() {
 		if global.QY_LOG != nil {

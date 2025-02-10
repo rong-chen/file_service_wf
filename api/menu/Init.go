@@ -49,19 +49,19 @@ var RouterList = []BaseMenu{
 	//	Desc: []uint{
 	//		88, 888,
 	//	}},
-	{UID: 2, ParentId: 0, Path: "my_files", Name: "my_files", Label: "我的文件", Icon: "wenjianjia-m", Component: "view/file/upload/index.vue",
+	{UID: 2, ParentId: 0, Path: "my_files", Name: "my_files", Label: "我的文件", Icon: "wenjianjia-m", Component: "view/home/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 3, ParentId: 0, Path: "group", Name: "group", Label: "小组", Icon: "group-fill", Component: "view/Home/index.vue",
+	{UID: 3, ParentId: 0, Path: "group", Name: "group", Label: "小组", Icon: "group-fill", Component: "view/group/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 4, ParentId: 0, Path: "private_file", Name: "private_file", Label: "私密文件", Icon: "baoxiangui", Component: "view/Home/index.vue",
+	{UID: 4, ParentId: 0, Path: "private_file", Name: "private_file", Label: "私密文件", Icon: "baoxiangui", Component: "view/private_file/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 5, ParentId: 0, Path: "del_file", Name: "del_file", Label: "回收站", Icon: "huishouzhan", Component: "view/Home/index.vue",
+	{UID: 5, ParentId: 0, Path: "del_file", Name: "del_file", Label: "回收站", Icon: "huishouzhan", Component: "view/del_file/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
