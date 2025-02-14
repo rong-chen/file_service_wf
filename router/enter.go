@@ -3,6 +3,7 @@ package router
 import (
 	"file_service/api/file"
 	"file_service/api/file_collection"
+	"file_service/api/group_share"
 	"file_service/api/menu"
 	"file_service/api/user"
 	"github.com/gin-gonic/gin"
@@ -20,4 +21,5 @@ var CheckRoutersList = []Routers{
 	&file.Router{},
 	&file_collection.Router{},
 	&menu.Router{},
+	&group_share.Router{},
 }

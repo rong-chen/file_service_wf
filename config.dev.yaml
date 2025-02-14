@@ -36,7 +36,7 @@ mysql:
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: qingyu
   username: admin
-  password: 130561Cr@
+  password: 130561Cr
   path: chenrong.vip
   engine: ""
   log-mode: error
