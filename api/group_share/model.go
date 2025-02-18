@@ -43,8 +43,10 @@ type FindGroupUsers struct {
 }
 
 type GroupFiles struct {
-	FileId  uint      `json:"file_id" gorm:"column:file_id;comment:文件ID;"`
-	GroupId uint      `json:"group_id" gorm:"column:group_id;comment:小组ID;"`
-	File    file.File `json:"file" gorm:"foreignKey:ID;references:FileId"`
+	FileId      uint      `json:"file_id" gorm:"column:file_id;comment:文件ID;"`
+	GroupId     uint      `json:"group_id" gorm:"column:group_id;comment:小组ID;"`
+	CreatorId   uint      `json:"creator_id" gorm:"column:creator_id;comment:分享人ID;"`
+	CreatorName string    `json:"creator_name" gorm:"-"`
+	File        file.File `json:"file" gorm:"foreignKey:ID;references:FileId"`
 	global.QyModel
 }

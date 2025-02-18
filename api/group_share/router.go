@@ -17,4 +17,10 @@ func (Router) InitRouter(g *gin.RouterGroup) {
 		router2.POST("join", Join)
 		router2.GET("list", FindGroupUsersList)
 	}
+
+	router3 := g.Group("group-file")
+	{
+		router3.POST("add", AddFile)
+		router3.GET("list", FindGroupFilesList)
+	}
 }

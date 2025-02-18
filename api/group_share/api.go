@@ -140,3 +140,43 @@ func FindGroupUsersList(c *gin.Context) {
 	}
 	response.OkWithData(list, "查询成功", c)
 }
+
+func AddFile(c *gin.Context) {
+	type Params struct {
+		FileId  uint `json:"file_id" binding:"required"`
+		GroupId uint `json:"group_id" binding:"required"`
+	}
+	var p Params
+	err := c.ShouldBindJSON(&p)
+	if err != nil {
+		response.FailWithMessage("参数错误"+err.Error(), c)
+		return
+	}
+	id, _ := c.Get("user_id")
+	queryParams := &GroupFiles{
+		GroupId:   p.GroupId,
+		FileId:    p.FileId,
+		CreatorId: id.(uint),
+	}
+	groupFiles, err := FindOrCreateGroupFileListByMap(queryParams)
+	if err != nil {
+		response.FailWithMessage("添加失败"+err.Error(), c)
+		return
+	}
+	response.OkWithData(groupFiles, "新增成功", c)
+}
+
+func FindGroupFilesList(c *gin.Context) {
+	groupId, is := c.GetQuery("group_id")
+	params := map[string]interface{}{}
+	if is {
+		ids, _ := strconv.Atoi(groupId)
+		params["group_files.group_id"] = ids
+	}
+	groupFiles, err := FindGroupFileListByMap(params)
+	if err != nil {
+		response.FailWithMessage("添加失败"+err.Error(), c)
+		return
+	}
+	response.OkWithData(groupFiles, "获取成功", c)
+}

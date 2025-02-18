@@ -39,3 +39,20 @@ func FindGroupUserListByGroupId(val1 map[string]interface{}) ([]FindGroupUsers, 
 		Where(val1).Find(&groupUsers).Error
 	return groupUsers, err
 }
+
+func FindOrCreateGroupFileListByMap(p *GroupFiles) (GroupFiles, error) {
+	err := global.QY_Db.Preload("File").FirstOrCreate(p, &p).Error
+	if err != nil {
+		return *p, err
+	}
+	return *p, err
+}
+func FindGroupFileListByMap(p map[string]interface{}) ([]GroupFiles, error) {
+	var groupFiles []GroupFiles
+	err := global.QY_Db.Table("group_files").
+		Select("group_files.*, users.account_name AS creator_name").
+		Joins("left join users ON users.id = group_files.creator_id").
+		Where(p).Preload("File").Find(&groupFiles).Error
+
+	return groupFiles, err
+}

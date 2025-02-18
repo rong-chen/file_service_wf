@@ -118,6 +118,7 @@ func RegisterTables() {
 		authority.AuthoritiesMenu{},
 		group_share.Group{},
 		group_share.GroupUsers{},
+		group_share.GroupFiles{},
 	)
 	if err != nil {
 		os.Exit(0)
