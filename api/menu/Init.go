@@ -57,7 +57,7 @@ var RouterList = []BaseMenu{
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 4, ParentId: 0, Path: "private_file", Name: "private_file", Label: "私密文件", Icon: "baoxiangui", Component: "view/private_file/index.vue",
+	{UID: 4, ParentId: 0, Path: "all_file", Name: "all_file", Label: "全部文件", Icon: "quanbuwenjian", Component: "view/all_file/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},

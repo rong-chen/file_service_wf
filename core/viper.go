@@ -26,17 +26,13 @@ func Viper(path ...string) *viper.Viper {
 				case gin.ReleaseMode:
 					config = "config.yaml"
 				}
-				fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.Mode(), config)
 			} else { // internal.ConfigEnv 常量存储的环境变量不为空 将值赋值于config
 				config = configEnv
-				fmt.Printf("您正在使用QY_CONFIG环境变量,config的路径为%s\n", config)
 			}
-		} else { // 命令行参数不为空 将值赋值于config
-			fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%s\n", config)
+			//fmt.Printf("您正在使用命令行的-c参数传递的值,config的路径为%s\n", config)
 		}
 	} else { // 函数传递的可变参数的第一个值赋值于config
 		config = path[0]
-		fmt.Printf("您正在使用func Viper()传递的值,config的路径为%s\n", config)
 	}
 
 	v := viper.New()
@@ -49,7 +45,6 @@ func Viper(path ...string) *viper.Viper {
 	v.WatchConfig()
 
 	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("config file changed:", e.Name)
 		if err = v.Unmarshal(&global.QY_CONFIG); err != nil {
 			fmt.Println(err)
 		}
@@ -57,6 +52,6 @@ func Viper(path ...string) *viper.Viper {
 	if err = v.Unmarshal(&global.QY_CONFIG); err != nil {
 		panic(err)
 	}
-	
+
 	return v
 }

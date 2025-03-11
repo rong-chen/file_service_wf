@@ -112,8 +112,9 @@ func ConsentRegister(c *gin.Context) {
 		return
 	}
 	type Params struct {
-		Id        uint `json:"id" binding:"required"`
-		IsExamine bool `json:"isExamine"`
+		Id        uint   `json:"id" binding:"required"`
+		IsExamine bool   `json:"isExamine"`
+		MountPath string `json:"mountPath" binding:"required"`
 	}
 
 	var p Params
@@ -123,11 +124,11 @@ func ConsentRegister(c *gin.Context) {
 		return
 
 	}
-	if p.IsExamine != true && p.IsExamine != false {
+	if p.IsExamine != true && p.IsExamine != false && p.MountPath != "" {
 		response.FailWithMessage("参数错误", c)
 	}
 
-	err = ContextUser.UpdateIsExamine(p.Id, p.IsExamine)
+	err = ContextUser.UpdateIsExamine(p.Id, p.IsExamine, p.MountPath)
 	if err != nil {
 		response.FailWithMessage("变更失败"+err.Error(), c)
 		return

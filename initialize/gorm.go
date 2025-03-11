@@ -7,6 +7,7 @@ import (
 	"file_service/api/group_share"
 	"file_service/api/menu"
 	"file_service/api/user"
+	"file_service/api/v2/file_v2"
 	"file_service/config"
 	"file_service/global"
 	"fmt"
@@ -83,7 +84,6 @@ func GormMysql() *gorm.DB {
 		DefaultStringSize:         191,     // string 类型字段的默认长度
 		SkipInitializeWithVersion: false,   // 根据版本自动配置
 	}
-	fmt.Println(mysqlConfig)
 	if db, err := gorm.Open(mysql.New(mysqlConfig), Gorm.Config(m.Prefix, m.Singular)); err != nil {
 		panic("数据库连接失败")
 	} else {
@@ -119,6 +119,7 @@ func RegisterTables() {
 		group_share.Group{},
 		group_share.GroupUsers{},
 		group_share.GroupFiles{},
+		file_v2.FileInfo{},
 	)
 	if err != nil {
 		os.Exit(0)

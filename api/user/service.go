@@ -35,9 +35,10 @@ func (us *service) FindAllUserInfo() (u []Users) {
 	return
 }
 
-func (us *service) UpdateIsExamine(id uint, b bool) error {
+func (us *service) UpdateIsExamine(id uint, b bool, mountPath string) error {
 	return global.QY_Db.Model(&Users{}).Where("id = ?", id).Select("is_examine").Updates(map[string]interface{}{
 		"is_examine": b,
+		"mount_path": mountPath,
 	}).Error
 }
 func (us *service) UpdateUseDiskSize(id uint, size uint64) error {

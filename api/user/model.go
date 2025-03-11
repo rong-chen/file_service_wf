@@ -16,6 +16,7 @@ type Users struct {
 	IsExamine      bool      `json:"isExamine" gorm:"column:is_examine;comment:是否通过审核;default:false"`
 	DiskSize       uint64    `json:"disk_size"  gorm:"column:disk_size;comment:用户可使用磁盘大小;default:0"`
 	UseDiskSize    uint64    `json:"use_disk_size"  gorm:"column:use_disk_size;comment:已使用;default:0"`
+	MountPath      string    `json:"mount_path"  gorm:"column:mount;comment:挂载目录;"`
 	global.QyModel
 }
 
