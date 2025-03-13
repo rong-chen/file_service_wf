@@ -120,6 +120,7 @@ func RegisterTables() {
 		group_share.GroupUsers{},
 		group_share.GroupFiles{},
 		file_v2.FileInfo{},
+		file_v2.ChunkInfo{},
 	)
 	if err != nil {
 		os.Exit(0)

@@ -9,61 +9,18 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-//	var RouterList = []BaseMenu{
-//		{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "仪表盘", Component: "view/Home/index.vue",
-//			Desc: []uint{
-//				88, 888,
-//			}},
-//		{UID: 2, ParentId: 0, Path: "admin", Name: "superAdmin", Label: "超级管理员", Desc: []uint{
-//			888,
-//		}},
-//		{UID: 3, ParentId: 0, Path: "file", Name: "file", Label: "文件操作", Desc: []uint{
-//			88, 888,
-//		}},
-//		{UID: 4, ParentId: 3, Path: "upload_file", Name: "upload_file", Label: "文件上传", Component: "view/file/upload/index.vue", Desc: []uint{
-//			88, 888,
-//		}},
-//		{UID: 5, ParentId: 2, Path: "admin", Name: "userManager", Label: "用户管理", Component: "view/sysManager/superAdmin/user_manager/index.vue", Desc: []uint{
-//			888,
-//		}},
-//	}
-
 var RouterList = []BaseMenu{
-	//{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "仪表盘", Component: "view/Home/index.vue",
-	//	Desc: []uint{
-	//		88, 888,
-	//	}},
-	//{UID: 2, ParentId: 0, Path: "admin", Name: "superAdmin", Label: "超级管理员", Desc: []uint{
-	//	888,
-	//}},
-	//{UID: 3, ParentId: 0, Path: "file", Name: "file", Label: "文件操作", Desc: []uint{
-	//	88, 888,
-	//}},
-	//{UID: 4, ParentId: 0, Path: "upload_file", Name: "upload_file", Label: "文件上传", Component: "view/file/upload/index.vue", Desc: []uint{
-	//	88, 888,
-	//}},
-	//{UID: 5, ParentId: 0, Path: "admin", Name: "userManager", Label: "用户管理", Component: "view/sysManager/superAdmin/user_manager/index.vue", Desc: []uint{
-	//	888,
-	//}},
-	//{UID: 1, ParentId: 0, Path: "home", Name: "home", Label: "首页", Icon: "home1", Component: "view/Home/index.vue",
-	//	Desc: []uint{
-	//		88, 888,
-	//	}},
-	{UID: 2, ParentId: 0, Path: "my_files", Name: "my_files", Label: "我的文件", Icon: "wenjianjia-m", Component: "view/home/index.vue",
+	{UID: 1, ParentId: 0, Path: "my_files", Name: "my_files", Label: "我的文件", Icon: "wenjianjia-m", Component: "view/home/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 3, ParentId: 0, Path: "group", Name: "group", Label: "小组", Icon: "group-fill", Component: "view/group/index.vue",
+	{UID: 2, ParentId: 0, Path: "del_file", Name: "del_file", Label: "回收站", Icon: "huishouzhan", Component: "view/del_file/index.vue",
 		Desc: []uint{
 			88, 888,
 		}},
-	{UID: 4, ParentId: 0, Path: "all_file", Name: "all_file", Label: "全部文件", Icon: "quanbuwenjian", Component: "view/all_file/index.vue",
+	{UID: 3, ParentId: 0, Path: "user_manager", Name: "user_manager", Label: "用户管理", Icon: "group-fill", Component: "view/userManager/index.vue",
 		Desc: []uint{
-			88, 888,
-		}},
-	{UID: 5, ParentId: 0, Path: "del_file", Name: "del_file", Label: "回收站", Icon: "huishouzhan", Component: "view/del_file/index.vue",
-		Desc: []uint{
-			88, 888,
+			888,
 		}},
 }
 
