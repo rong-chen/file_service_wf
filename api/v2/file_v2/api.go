@@ -86,6 +86,7 @@ func UploadChunk(c *gin.Context) {
 	response.OkWithMessage("上传文件成功", c)
 }
 
+// CombinedFile 上传成功
 func CombinedFile(c *gin.Context) {
 	type Params struct {
 		Id uint `json:"id"`
@@ -111,6 +112,7 @@ func CombinedFile(c *gin.Context) {
 		response.FailWithMessage("文件合并失败"+err.Error(), c)
 		return
 	}
+
 	// ✅ 合并成功后，删除碎片目录
 	err = os.RemoveAll(utils.GetOsPath(filepath.Join(file.ChunkPath)))
 	if err != nil {

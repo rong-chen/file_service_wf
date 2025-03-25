@@ -90,5 +90,5 @@ cors:
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true
 local:
-  path: uploads/file
-  store-path: uploads/file
+  path: mnt
+  store-path: mnt

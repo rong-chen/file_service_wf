@@ -2,9 +2,6 @@ package initialize
 
 import (
 	"file_service/api/authority"
-	"file_service/api/file"
-	"file_service/api/file_collection"
-	"file_service/api/group_share"
 	"file_service/api/menu"
 	"file_service/api/user"
 	"file_service/api/v2/file_v2"
@@ -110,15 +107,15 @@ func RegisterTables() {
 	err := db.AutoMigrate(
 		user.Users{},
 		authority.Authorities{},
-		file.FileChunk{},
-		file.File{},
-		file.ShareFileInfo{},
-		file_collection.LikeFile{},
+		//file.FileChunk{},
+		//file.File{},
+		//file.ShareFileInfo{},
+		//file_collection.LikeFile{},
 		menu.BaseMenu{},
 		authority.AuthoritiesMenu{},
-		group_share.Group{},
-		group_share.GroupUsers{},
-		group_share.GroupFiles{},
+		//group_share.Group{},
+		//group_share.GroupUsers{},
+		//group_share.GroupFiles{},
 		file_v2.FileInfo{},
 		file_v2.ChunkInfo{},
 	)
